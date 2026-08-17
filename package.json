@@ -1,0 +1,31 @@
+{
+  "name": "shotdock",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ShotDock — capture the web, keep it simple. A privacy-first Manifest V3 screenshot extension.",
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build && vite build --config vite.content.config.ts",
+    "dev": "node scripts/dev.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node tests/e2e/smoke.mjs",
+    "check": "npm run typecheck && npm run test && npm run build"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.2.6",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
+    "vitest": "^4.0.0"
+  }
+}

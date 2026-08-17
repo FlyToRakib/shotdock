@@ -1,0 +1,143 @@
+/* Full-size preview tab. The screenshot is the content, so the chrome around it
+   is a single bar — the global header, carrying this page's meta and controls in
+   the slot it already exposes. There is no footer on this surface. The header
+   itself comes from the global layer in ui/tokens.css and is not touched; the
+   overrides below are all scoped under .sd-preview-page so no other surface can
+   see them. */
+
+.sd-preview-page {
+  min-height: 100vh;
+}
+
+.sd-preview-page .sd-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Toolbar inside the global header ---------------------------------------- */
+
+/* The header carries three groups here rather than two, so it is allowed to
+   grow and wrap instead of squeezing them at narrow widths. */
+.sd-preview-page .sd-header--page {
+  height: auto;
+  min-height: 70px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+/* Rules on both sides of the toolbar, so "ShotDock", the capture's identity and
+   the Degird credit read as three groups rather than one run of text. */
+.sd-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+  margin-left: 6px;
+  margin-right: 6px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-left: 1px solid var(--sd-border);
+  border-right: 1px solid var(--sd-border);
+}
+
+/* Too narrow to hold brand, meta, controls and credit on one line — drop the
+   toolbar onto a row of its own rather than squeezing all four. */
+@media (max-width: 860px) {
+  .sd-page__toolbar {
+    order: 3;
+    flex-basis: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+.sd-page__meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sd-page__host {
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sd-page__dims {
+  font-size: 11.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Canvas ------------------------------------------------------------------ */
+
+.sd-page__canvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 40px;
+}
+
+.sd-page__image {
+  display: block;
+  border: 1px solid var(--sd-border-strong);
+  border-radius: var(--sd-radius);
+  background-color: var(--sd-surface);
+  box-shadow: var(--sd-shadow);
+}
+
+/* Fit keeps the whole width on screen; 100% shows device pixels one-to-one and
+   lets the page scroll in both directions. */
+.sd-page__canvas--fit .sd-page__image {
+  max-width: min(100%, 1400px);
+  height: auto;
+}
+
+.sd-page__canvas--actual {
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.sd-page__canvas--actual .sd-page__image {
+  max-width: none;
+  flex: none;
+}
+
+.sd-page__note {
+  margin: 0;
+  max-width: 60ch;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-page__note--warn {
+  color: var(--sd-danger);
+}
+
+.sd-toast--page {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  padding: 10px 16px;
+}

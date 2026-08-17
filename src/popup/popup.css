@@ -1,0 +1,429 @@
+/* The popup. Header and footer come from the global layer in ui/tokens.css;
+   everything here is the body between them. */
+
+.sd-popup {
+  width: 400px;
+}
+
+.sd-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+  position: relative;
+}
+
+/* Main -------------------------------------------------------------------- */
+
+.sd-main {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sd-gap);
+  flex: 1;
+}
+
+.sd-section-label {
+  margin: 0 0 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--sd-text-muted);
+}
+
+.sd-home {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Capture buttons ---------------------------------------------------------
+   Two equal columns rather than a stack, so the result screen still fits a
+   thumbnail under them inside the popup's 600px ceiling. Same hover contract as
+   every other button in the family: neutral at rest, lime with graphite text on
+   hover. */
+
+.sd-home__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.sd-capture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 14px 10px;
+  text-align: center;
+  border: 1px solid var(--sd-border);
+  border-radius: var(--sd-radius);
+  background-color: var(--sd-surface);
+  color: var(--sd-text);
+  transition: all 0.2s ease;
+}
+
+.sd-capture--secondary:hover:not(:disabled) {
+  background-color: var(--sd-accent);
+  border-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+}
+
+.sd-capture:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* On the result screen the pair collapses to a single icon-and-label row each. */
+.sd-capture--compact {
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 8px;
+  text-align: left;
+}
+
+.sd-capture--compact .sd-capture__icon {
+  width: 26px;
+  height: 26px;
+}
+
+.sd-capture--compact .sd-capture__text {
+  flex: none;
+  align-items: flex-start;
+}
+
+.sd-capture--primary {
+  background-color: var(--sd-accent);
+  border-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+}
+
+.sd-capture--primary:hover:not(:disabled) {
+  background-color: var(--sd-accent-hover);
+  border-color: var(--sd-accent-hover);
+}
+
+.sd-capture__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: var(--sd-radius);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  /* Washes on a lime row are the graphite, not white — the lime is far too
+     light for a white overlay to read as anything at all. */
+  background-color: rgb(17 24 39 / 12%);
+}
+
+.sd-capture--secondary .sd-capture__icon {
+  background-color: var(--sd-bg);
+  border-color: var(--sd-border);
+  color: var(--sd-text-muted);
+}
+
+.sd-capture--secondary:hover:not(:disabled) .sd-capture__icon {
+  background-color: rgb(17 24 39 / 12%);
+  border-color: rgb(17 24 39 / 20%);
+  color: var(--sd-accent-text);
+}
+
+.sd-capture__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sd-capture__title {
+  font-weight: 600;
+}
+
+.sd-capture__description {
+  font-size: 11px;
+  line-height: 1.35;
+  opacity: 0.75;
+}
+
+.sd-capture__shortcut {
+  font-family: var(--sd-font);
+  font-size: 10.5px;
+  padding: 3px 6px;
+  border-radius: var(--sd-radius-sm);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  background-color: rgb(17 24 39 / 14%);
+}
+
+.sd-capture--secondary .sd-capture__shortcut {
+  background-color: var(--sd-bg);
+  border-color: var(--sd-border);
+  color: var(--sd-text-muted);
+}
+
+.sd-capture--secondary:hover:not(:disabled) .sd-capture__shortcut {
+  background-color: rgb(17 24 39 / 14%);
+  border-color: rgb(17 24 39 / 20%);
+  color: var(--sd-accent-text);
+}
+
+/* Progress ---------------------------------------------------------------- */
+
+.sd-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.sd-progress__headline {
+  font-weight: 600;
+}
+
+.sd-bar {
+  height: 6px;
+  border-radius: 999px;
+  background-color: var(--sd-surface-hover);
+  overflow: hidden;
+}
+
+.sd-bar__fill {
+  height: 100%;
+  background-color: var(--sd-accent);
+  border-radius: inherit;
+  transition: width 0.2s ease;
+}
+
+.sd-bar--indeterminate .sd-bar__fill {
+  animation: sd-sweep 1.1s ease-in-out infinite;
+  transform-origin: left center;
+}
+
+@keyframes sd-sweep {
+  0% {
+    transform: scaleX(0.15);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleX(0.65);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(0.15);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-bar--indeterminate .sd-bar__fill {
+    animation: none;
+  }
+}
+
+.sd-progress__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--sd-text-muted);
+  font-size: 12px;
+}
+
+.sd-progress__percent {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sd-accent);
+}
+
+.sd-progress__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sd-progress__actions .sd-btn {
+  flex: 1;
+}
+
+/* Result ------------------------------------------------------------------ */
+
+.sd-result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* The previous capture sits below the capture options, visibly demoted: a rule
+   above it, a heading that names it, and its age. */
+
+.sd-previous {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--sd-border);
+}
+
+.sd-previous__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sd-previous__head .sd-section-label {
+  margin: 0;
+}
+
+.sd-previous__expand {
+  padding: 2px 6px;
+  font-size: 11.5px;
+  border-radius: var(--sd-radius-sm);
+}
+
+/* A shorter thumbnail than the standalone preview: the capture options above it
+   have first claim on the popup's 600px ceiling, and full size is a click away. */
+.sd-previous .sd-preview__frame,
+.sd-previous .sd-preview__frame img {
+  max-height: 144px;
+}
+
+.sd-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sd-preview__meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.sd-preview__host {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sd-preview__dims {
+  font-size: 11.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-preview__frame {
+  display: grid;
+  place-items: center;
+  max-height: 230px;
+  overflow: hidden;
+  border: 1px solid var(--sd-border);
+  border-radius: var(--sd-radius);
+  background-color: var(--sd-surface);
+}
+
+.sd-preview__frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+}
+
+.sd-preview__frame--empty {
+  padding: 26px;
+  font-size: 12px;
+  color: var(--sd-text-muted);
+}
+
+.sd-format {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sd-format__hint {
+  font-size: 11.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-quality {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  font-size: 11.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-quality input {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--sd-accent);
+}
+
+.sd-quality__value {
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-result__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sd-result__actions .sd-btn {
+  flex: 1;
+}
+
+/* Notes, errors, toast ---------------------------------------------------- */
+
+.sd-note {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--sd-text-muted);
+}
+
+.sd-note--warn {
+  color: var(--sd-danger);
+}
+
+.sd-error {
+  padding: 12px;
+  border-radius: var(--sd-radius);
+  border: 1px solid var(--sd-danger);
+  background-color: var(--sd-danger-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sd-error__title {
+  font-weight: 600;
+}
+
+.sd-error__message {
+  margin: 0;
+  color: var(--sd-text-muted);
+}
+
+.sd-error__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.sd-error__actions .sd-btn {
+  flex: 1;
+}
+
+/* Anchored clear of the footer's two rows of links. */
+.sd-toast {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 66px;
+  text-align: center;
+}

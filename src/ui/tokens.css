@@ -1,0 +1,338 @@
+/* ShotDock design tokens.
+
+   ShotDock is a Degird extension and shares one visual system with the rest of
+   the family (TabFold is the reference implementation). That system is a single
+   dark ground with one accent:
+
+     Graphite #111827  the page, and the ink that goes *on* the lime.
+     Lime     #AEED22  the accent — links, focus, active nav, primary fills.
+
+   Two consequences worth knowing before editing anything below:
+
+   * There is no light theme. The lime is very light (L* ≈ 87), so it only
+     carries dark text and only reads as an accent against a dark ground; the
+     whole palette is built on that assumption.
+   * Lime never carries white text. `--sd-accent-text` is the graphite, and it
+     is the only text colour a lime surface ever takes (11.9:1).
+
+   Neutrals are the shared graphite ramp, so the accent never looks pasted onto
+   a foreign grey. */
+
+:root {
+  --sd-bg: #111827;
+  --sd-surface: #1f2937;
+  --sd-surface-hover: #374151;
+  --sd-control: #374151;
+  --sd-border: #374151;
+  --sd-border-strong: #4b5563;
+  --sd-text: #f9fafb;
+  --sd-text-muted: #9ca3af;
+  --sd-accent: #aeed22;
+  --sd-accent-hover: #c8ff40;
+  /* Text on a lime fill — never white: white on the lime is 1.4:1. */
+  --sd-accent-text: #111827;
+  /* Thin marks (rules, rings, progress fills) on the dark ground: the lime is
+     already 10.6:1 there, so the accent and its ink are the same colour. */
+  --sd-accent-ink: #aeed22;
+  --sd-on-ink: #111827;
+  --sd-success: #10b981;
+  --sd-danger: #ef4444;
+  --sd-danger-soft: #2a1618;
+
+  --sd-radius-sm: 4px;
+  --sd-radius: 6px;
+  --sd-radius-lg: 8px;
+  --sd-gap: 16px;
+  --sd-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+
+  --sd-font: 'Inter', 'Roboto', sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sd-font);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--sd-text);
+  background-color: var(--sd-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* The 2px offset keeps the ring on the page background rather than on whatever
+   it is ringing, which is what lets one accent colour work over every surface. */
+:focus-visible {
+  outline: 2px solid var(--sd-accent-ink);
+  outline-offset: 2px;
+}
+
+/* Buttons ------------------------------------------------------------------
+   Neutral by default, lime on hover — the family's signature interaction. */
+
+.sd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: var(--sd-radius);
+  border: 1px solid var(--sd-border);
+  background-color: var(--sd-control);
+  color: var(--sd-text);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.sd-btn:hover:not(:disabled) {
+  background-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+  border-color: var(--sd-accent);
+}
+
+/* The one place the lime sits filled at rest, reserved for the single action a
+   surface exists to perform (Download, Resume, Try again). */
+.sd-btn--primary {
+  background-color: var(--sd-accent);
+  border-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+}
+
+.sd-btn--primary:hover:not(:disabled) {
+  background-color: var(--sd-accent-hover);
+  border-color: var(--sd-accent-hover);
+}
+
+.sd-btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--sd-text-muted);
+}
+
+.sd-btn--ghost:hover:not(:disabled) {
+  background-color: var(--sd-surface);
+  color: var(--sd-accent);
+  border-color: transparent;
+}
+
+/* Segmented control — image format in the popup, zoom in the preview tab. */
+
+.sd-segmented {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border-radius: var(--sd-radius);
+  background-color: var(--sd-surface);
+  border: 1px solid var(--sd-border);
+}
+
+.sd-segmented__option {
+  padding: 4px 12px;
+  border-radius: var(--sd-radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sd-text-muted);
+  transition: all 0.2s ease;
+}
+
+.sd-segmented__option:hover:not(:disabled):not(.is-active) {
+  color: var(--sd-text);
+}
+
+.sd-segmented__option.is-active {
+  background-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+}
+
+/* Toast — every surface confirms an action the same way; only the anchoring
+   differs, and that belongs to the surface. */
+
+/* The live region is always present so a screen reader is already watching it
+   when a toast appears. `display: contents` keeps it out of the layout entirely,
+   so the toast still positions against the surface it sits on. */
+.sd-toast-region {
+  display: contents;
+}
+
+.sd-toast {
+  padding: 9px 12px;
+  border-radius: var(--sd-radius);
+  background-color: var(--sd-accent);
+  color: var(--sd-accent-text);
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: var(--sd-shadow);
+}
+
+/* Global header ------------------------------------------------------------
+   One structure across the popup, the settings page and the preview tab:
+   brand on the left, optional navigation in the middle, the Degird credit on
+   the right, and the cog last where a surface offers one. */
+
+.sd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px;
+  background-color: var(--sd-bg);
+  border-bottom: 1px solid var(--sd-border);
+}
+
+.sd-logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.sd-powered-by {
+  font-size: 10px;
+  color: var(--sd-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sd-degird-link {
+  color: var(--sd-accent);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.sd-degird-link:hover {
+  text-decoration: underline;
+}
+
+.sd-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--sd-accent);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.sd-icon-btn:hover {
+  color: var(--sd-accent-hover);
+  transform: rotate(30deg);
+}
+
+/* Full-page surfaces (settings, preview) get the taller sticky bar. */
+.sd-header--page {
+  height: 70px;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sd-header__nav {
+  display: flex;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 32px;
+}
+
+.sd-nav-link {
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--sd-text-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.sd-nav-link:hover {
+  color: var(--sd-text);
+}
+
+.sd-nav-link.is-active {
+  color: var(--sd-accent);
+}
+
+.sd-nav-link.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: var(--sd-accent);
+  border-radius: 2px 2px 0 0;
+}
+
+/* Global footer ----------------------------------------------------------- */
+
+.sd-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--sd-border);
+  background-color: var(--sd-bg);
+  text-align: center;
+}
+
+.sd-footer--page {
+  padding: 16px 24px;
+}
+
+.sd-footer__links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.sd-footer--page .sd-footer__links {
+  gap: 20px;
+}
+
+.sd-footer__links a {
+  font-size: 10px;
+  color: var(--sd-text-muted);
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.sd-footer__links a:hover {
+  color: var(--sd-accent);
+}
+
+.sd-footer__copy {
+  font-size: 10px;
+  color: var(--sd-text-muted);
+  letter-spacing: 0.5px;
+  opacity: 0.6;
+}

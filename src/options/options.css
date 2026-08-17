@@ -1,0 +1,199 @@
+/* The settings page. Header and footer come from the global layer in
+   ui/tokens.css; this file styles the panels between them. */
+
+.sd-options {
+  min-height: 100vh;
+}
+
+.sd-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sd-page-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.sd-settings {
+  width: 100%;
+  max-width: 600px;
+}
+
+.sd-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sd-panel {
+  display: none;
+}
+
+.sd-panel.is-active {
+  display: block;
+}
+
+.sd-body-text {
+  font-size: 13px;
+  color: var(--sd-text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Cards ------------------------------------------------------------------- */
+
+.sd-card {
+  background-color: var(--sd-surface);
+  border: 1px solid var(--sd-border-strong);
+  border-radius: var(--sd-radius-lg);
+  padding: 8px 24px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--sd-shadow);
+}
+
+.sd-card h2 {
+  font-size: 16px;
+  margin: 16px 0 8px;
+}
+
+.sd-card p {
+  font-size: 14px;
+  color: var(--sd-text-muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+/* Rows -------------------------------------------------------------------- */
+
+.sd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--sd-border);
+}
+
+.sd-card h2 + .sd-row {
+  border-top: none;
+}
+
+.sd-row--toggle {
+  cursor: pointer;
+}
+
+.sd-row__label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.sd-row__control {
+  flex: none;
+}
+
+.sd-hint {
+  font-size: 12px;
+  color: var(--sd-text-muted);
+  margin: 0;
+}
+
+/* Controls ---------------------------------------------------------------- */
+
+select {
+  font: inherit;
+  color: var(--sd-text);
+  background-color: var(--sd-control);
+  border: 1px solid var(--sd-border-strong);
+  border-radius: var(--sd-radius);
+  padding: 8px;
+  max-width: 280px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--sd-accent);
+}
+
+/* The one control the brand could not reach through `accent-color`: Chrome
+   paints an *unchecked* box in its own neutral grey, which reads as foreign on
+   a graphite card. Taking the box over means drawing the tick too, hence
+   --sd-on-ink — the graphite that stays legible on the lime. */
+input[type='checkbox'] {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1px solid var(--sd-border-strong);
+  border-radius: var(--sd-radius-sm);
+  background-color: var(--sd-control);
+  transition: all 0.2s ease;
+}
+
+input[type='checkbox']:hover {
+  border-color: var(--sd-accent);
+}
+
+input[type='checkbox']:checked {
+  background-color: var(--sd-accent);
+  border-color: var(--sd-accent);
+}
+
+input[type='checkbox']::before {
+  content: '';
+  width: 9px;
+  height: 5px;
+  border: 2px solid var(--sd-on-ink);
+  border-top: 0;
+  border-right: 0;
+  border-radius: 1px;
+  transform: translateY(-1px) rotate(-45deg);
+  opacity: 0;
+}
+
+input[type='checkbox']:checked::before {
+  opacity: 1;
+}
+
+.sd-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sd-range input {
+  accent-color: var(--sd-accent);
+}
+
+/* Save row ---------------------------------------------------------------- */
+
+.sd-save-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sd-status {
+  color: var(--sd-success);
+  font-weight: 700;
+  font-size: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.sd-status.is-hidden {
+  opacity: 0;
+}
