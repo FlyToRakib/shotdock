@@ -26,6 +26,7 @@ Then load it: `chrome://extensions` → enable **Developer mode** → **Load unp
 | `npm run test:e2e`  | Drives a real capture in headless Chrome (needs `npm run build` first) |
 | `npm run typecheck` | `tsc --noEmit` across `src/` and `tests/`                 |
 | `npm run check`     | Typecheck, test, and build — the pre-commit sweep         |
+| `npm run package`   | `check`, then the Web Store zip — the whole release step  |
 
 Default shortcuts: **Alt+Shift+S** full page, **Alt+Shift+V** visible area (rebindable at
 `chrome://extensions/shortcuts`).
@@ -241,6 +242,48 @@ granted by a real toolbar click (so it runs against a copy of `dist/` with host 
 Pages worth exercising by hand: Wikipedia (long, image-heavy), GitHub (sticky header), a
 lazy-loading news site, a dashboard with a fixed sidebar, an infinite-scroll feed, and anything
 with a cookie banner.
+
+---
+
+## Packaging
+
+One command builds and packs the Chrome Web Store upload:
+
+```bash
+npm run package     # typecheck → tests → build → shotdock-<version>.zip
+```
+
+**The version always comes from `public/manifest.json`** — the only place a release number is
+written. Bump it there and the zip renames itself; nothing else, `package.json` included, gets a
+say. If `dist/` was built from a different version the script refuses to pack rather than produce
+an archive whose filename disagrees with the manifest inside it.
+
+Two details the format demands, both handled by `scripts/package.mjs`:
+
+**`manifest.json` must be at the root of the archive.** Zipping the `dist/` *folder* buries it one
+level down, which the store rejects — so the script packs dist's *contents*.
+
+**The zip is byte-reproducible.** Entries carry a fixed 1980-01-01 timestamp, so the same `dist/`
+always hashes the same. The printed sha256 is what makes "is the build I uploaded the build I
+tested?" a question with an answer. Source maps and OS files are left out.
+
+It writes the archive itself rather than depending on a zip library — the format is a few headers
+wide, and the rest of the toolchain has no build dependencies either. `node scripts/package.mjs`
+packs whatever is already in `dist/` if you need to skip the checks.
+
+### Submitting
+
+Listing copy, permission justifications and the privacy policy all live in
+[docs/store-listing.md](docs/store-listing.md), written to match this manifest. Upload the zip at
+the [Developer Dashboard](https://chrome.google.com/webstore/devconsole); the title, summary and
+icon come from the manifest, everything else is pasted from that document. The Privacy practices
+tab is the part that stalls reviews: it wants the single-purpose statement, a justification for
+each of the five permissions, and *no* to remote code — which is honest here, since everything is
+bundled and the CSP is `script-src 'self'`.
+
+Two things the repo does not produce: **screenshots** (at least one 1280×800 or 640×400 PNG is
+mandatory) and a **hosted privacy policy URL** — `APP_LINKS.privacy` in `src/ui/links.ts` still
+points at a Google Doc.
 
 ---
 
