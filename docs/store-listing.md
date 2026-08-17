@@ -7,6 +7,10 @@ Manifest V3, five permissions, no host permissions, and no network requests to a
 - **Contact email:** hello@degird.com
 - **Extension version:** 1.0.0
 - **Minimum Chrome version:** 116
+- **Category:** Art & Design — Google's category guidance names "capturing screenshots" under Art &
+  Design explicitly. **Tools** is defined as "utilities not fitting other categories", so it is the
+  wrong pick here precisely because a named category does fit.
+- **Language:** English
 - **Last updated:** 17 August 2026
 
 ---
